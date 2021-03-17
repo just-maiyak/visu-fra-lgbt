@@ -8,6 +8,9 @@ flag_colors = ["#ff595e", "#ffca3a", "#8ac926", "#1982c4", "#6a4c93"]
 
 data = prep.open_data()
 groups = prep.groups
+countries_polled = set(data["counts"].CountryName.unique())
+
+question_filter = lambda d, qs: d[d.question_code.isin(qs)]
 
 
 def bar_repartition(title="", log=False, f=lambda x: x, width=None, height=700):
@@ -43,7 +46,6 @@ def map_repartition(title="", f=lambda x: x, width=None, height=800):
     fig = go.Figure()
 
     for i, g in enumerate(groups):
-        print(g, groups[:i], f(N - country_counts[groups[:i]].sum(axis=1)))
         fig.add_trace(
             go.Scattergeo(
                 text=country_counts[g],
@@ -76,4 +78,18 @@ def map_repartition(title="", f=lambda x: x, width=None, height=800):
 def map_heatmap():
     fig = go.Figure()
 
+    return fig
+
+
+def answers_heatmap(category, question_code, country):
+    df = data[category]
+    fig = px.density_heatmap(
+        question_filter(df[df.CountryName == country], [question_code]),
+        x="subset",
+        y="answer",
+        z="percentage",
+        color_continuous_scale=px.colors.sequential.dense,
+        histfunc="avg",
+        height=700,
+    )
     return fig

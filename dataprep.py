@@ -9,6 +9,13 @@ countries = {c.name: c.alpha_2 for c in pycountry.countries}
 c_names = {c.alpha_2: c.name for c in pycountry.countries}
 
 groups = ["Gay men", "Lesbian women", "Bisexual women", "Bisexual men", "Transgender"]
+category_map = {
+    "daily_life": "Daily Life",
+    "rights_aware": "Rights Awareness",
+    "trans_questions": "Trans Specific Questions",
+    "discrimination": "Discrimination",
+    "violence": "Violence and Threat",
+}
 
 
 def open_data(path: str = "data") -> Dict[str, pd.DataFrame]:

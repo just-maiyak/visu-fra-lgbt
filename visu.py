@@ -14,6 +14,8 @@ external_stylesheets = ["https://codepen.io/chriddyp/pen/bWLwgP.css"]
 app = dash.Dash(
     __name__, url_base_pathname="/vfl/", external_stylesheets=external_stylesheets
 )
+app.config.suppress_callback_exceptions = False
+
 main_colors = {
     "background": "#201f25",
     "text": "#f8f9f1",
@@ -39,6 +41,13 @@ tab_selected_style = {
     "fontWeight": "bold",
 }
 
+dropdown_style = {
+    "padding": "2px",
+    "color": "#aaaaaa",
+    "backgroundColor": main_colors["text"],
+    "borderTop": f"1px solid {main_colors['accent']}",
+}
+
 # Figures declaration
 groups = prep.groups
 
@@ -51,8 +60,33 @@ apply_main_styles = lambda fig: fig.update_layout(
 bar_rep = apply_main_styles(figs.bar_repartition())
 map_rep = apply_main_styles(figs.map_repartition(f=lambda x: x / 100))
 
+
+@app.callback(
+    Output("answers-heatmap", "figure"),
+    Input("category-filter", "value"),
+    Input("question-filter", "value"),
+    Input("country-filter", "value"),
+)
+def update_heatmap(category, question_code, country):
+    return apply_main_styles(figs.answers_heatmap(category, question_code, country))
+
+
+answers_heatmap = apply_main_styles(
+    figs.answers_heatmap("daily_life", "b1_c", "France")
+)
+
+# Layout declaration
 app.layout = dhc.Div(
-    [
+    style={"backgroundColor": main_colors["background"]},
+    children=[
+        dhc.H1(
+            "EU-FRA LGBT Survey from 2021",
+            style={"textAlign": "center", "color": main_colors["text"]},
+        ),
+        dhc.H2(
+            "Overview of the polled population",
+            style={"color": main_colors["text_sub"], "textAlign": "center"},
+        ),
         dcc.Tabs(
             id="main-tabs",
             value="overview",
@@ -72,13 +106,52 @@ app.layout = dhc.Div(
             ],
             colors={
                 "primary": main_colors["text_sub"],
-                "text": main_colors["text"],
                 "background": main_colors["background"],
             },
             style=tabs_styles,
         ),
-        dhc.Div(id="main-tabs-content"),
-    ]
+        dhc.Div(
+            id="main-tabs-content",
+            children=[
+                dhc.Div(
+                    style={"backgroundColor": main_colors["background"]},
+                    children=[
+                        dhc.Div(
+                            style={"backgroundColor": main_colors["background"]},
+                            children=[
+                                dcc.Dropdown(
+                                    id="country-filter",
+                                    options=[
+                                        {"label": i, "value": i}
+                                        for i in figs.countries_polled
+                                    ],
+                                    value="France",
+                                    style=dropdown_style,
+                                ),
+                                dcc.Dropdown(
+                                    id="category-filter",
+                                    options=[
+                                        {"label": v, "value": k}
+                                        for k, v in prep.category_map.items()
+                                    ],
+                                    value="daily_life",
+                                    style=dropdown_style,
+                                ),
+                                dcc.Dropdown(
+                                    id="question-filter", style=dropdown_style
+                                ),
+                            ],
+                        ),
+                        dhc.Div(
+                            [
+                                dcc.Graph(id="answers-heatmap", figure=answers_heatmap),
+                            ]
+                        ),
+                    ],
+                )
+            ],
+        ),
+    ],
 )
 
 
@@ -88,14 +161,6 @@ def main_tab_render(tab):
         ov = dhc.Div(
             style={"backgroundColor": main_colors["background"]},
             children=[
-                dhc.H1(
-                    "EU-FRA LGBT Survey from 2021",
-                    style={"textAlign": "center", "color": main_colors["text"]},
-                ),
-                dhc.H2(
-                    "Overview of the polled population",
-                    style={"color": main_colors["text_sub"], "textAlign": "center"},
-                ),
                 dcc.Graph(
                     id="bar-rep",
                     figure=bar_rep,
@@ -110,7 +175,54 @@ def main_tab_render(tab):
         )
         return ov
     elif tab == "questions":
-        return dhc.Div("test", style=tab_style)
+        return dhc.Div(
+            style={"backgroundColor": main_colors["background"]},
+            children=[
+                dhc.Div(
+                    style={"backgroundColor": main_colors["background"]},
+                    children=[
+                        dcc.Dropdown(
+                            id="country-filter",
+                            options=[
+                                {"label": i, "value": i} for i in figs.countries_polled
+                            ],
+                            value="France",
+                            style=dropdown_style,
+                        ),
+                        dcc.Dropdown(
+                            id="category-filter",
+                            options=[
+                                {"label": v, "value": k}
+                                for k, v in prep.category_map.items()
+                            ],
+                            value="daily_life",
+                            style=dropdown_style,
+                        ),
+                        dcc.Dropdown(id="question-filter", style=dropdown_style),
+                    ],
+                ),
+                dhc.Div(
+                    [
+                        dcc.Graph(id="answers-heatmap", figure=answers_heatmap),
+                    ]
+                ),
+            ],
+        )
+
+
+@app.callback(
+    Output("question-filter", "options"),
+    Output("question-filter", "value"),
+    Input("category-filter", "value"),
+)
+def update_question_dropdown(category):
+    questions = figs.data[category][
+        ["question_label", "question_code"]
+    ].drop_duplicates()
+    questions = questions.rename(
+        columns={"question_label": "label", "question_code": "value"}
+    )
+    return questions.to_dict("records"), questions["value"][0]
 
 
 server = app.server
