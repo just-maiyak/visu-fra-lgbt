@@ -88,8 +88,8 @@ def answers_heatmap(category, question_code, country):
         x="subset",
         y="answer",
         z="percentage",
-        color_continuous_scale=px.colors.sequential.dense,
+        color_continuous_scale=list(reversed(flag_colors)),
         histfunc="avg",
-        height=700,
+        height=600,
     )
     return fig
