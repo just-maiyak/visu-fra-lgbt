@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/black.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css" id="highlight-theme">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+                <section>
+                    <h2>Visualizing FRA's 2012 LGBT survey</h2>
+                </section>
+                <section>
+                    <section>
+                        <h2>European Union Fundamental Rights Agency</h2>
+                        <p>EU FRA</p>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## EU's FRA
+                            FRA is European Union's independent Fundamental Rights Agency.
+                            They help promote and protect those rights, including your rights to:
+                            - Be free from discrimination on the basis of age, disability or ethnic background
+                            - Have your personal data protected
+                            - Get access to justice
+
+                            More information available at [FRA's website](https://fra.europa.eu/en/about-fra).
+                        </textarea>
+                    </section>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ### Summary
+                            The data visualized is a poll about how LGBT people experience
+                            discrimination and harrassment in different areas of their lives.
+
+                            Source : [Survey page](https://fra.europa.eu/en/publication/2014/eu-lgbt-survey-european-union-lesbian-gay-bisexual-and-transgender-survey-main)
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            It is presented in 6 csv files, one per area of study :
+                            - Daily life standards
+                            - Rights awareness of LGBTs and their acquaintances
+                            - Discrimination
+                            - Violence and harrasment experience
+                            - Specific questions for transgender people
+                            - Count repartition of the participating countries
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ### Schema
+                            - Each of the five areas researched by this poll consists of a series of Q/As
+                            for each country.
+                            - Each Q/A/Country has then the information of the proportion of poll votes for each population in `[L, G, B, T]`.
+                        </textarea>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## The data
+                            ### Sample schema
+                            ```yaml
+                            daily_life:
+                                - CountryCode
+                                - subset
+                                - question_code
+                                - question_label
+                                - answer
+                                - percentage
+                                - notes
+                            ```
+                        </textarea>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Target Audiance</>
+                    </section>
+                    <section data-markdown>
+                        <textarea data-template>
+                            ## Target audience
+                            A typical usecase would be to monitor answers repartition
+                            for FRA's agents who ordered the poll.
+                        </textarea>
+                    </section>
+                </section>
+                <section>
+                    <h1>Demo</h1>
+                </section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
