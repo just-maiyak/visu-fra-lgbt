@@ -83,10 +83,6 @@ app.layout = dhc.Div(
             "EU-FRA LGBT Survey from 2021",
             style={"textAlign": "center", "color": main_colors["text"]},
         ),
-        dhc.H2(
-            "Overview of the polled population",
-            style={"color": main_colors["text_sub"], "textAlign": "center"},
-        ),
         dcc.Tabs(
             id="main-tabs",
             value="overview",
@@ -161,6 +157,10 @@ def main_tab_render(tab):
         ov = dhc.Div(
             style={"backgroundColor": main_colors["background"]},
             children=[
+        dhc.H2(
+            "Overview of the polled population",
+            style={"color": main_colors["text_sub"], "textAlign": "center"},
+        ),
                 dcc.Graph(
                     id="bar-rep",
                     figure=bar_rep,
@@ -181,6 +181,10 @@ def main_tab_render(tab):
                 dhc.Div(
                     style={"backgroundColor": main_colors["background"]},
                     children=[
+        dhc.H2(
+            "Poll questions/answers explorer",
+            style={"color": main_colors["text_sub"], "textAlign": "center"},
+        ),
                         dcc.Dropdown(
                             id="country-filter",
                             options=[
