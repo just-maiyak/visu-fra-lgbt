@@ -63,7 +63,7 @@ _Fig. 2 :_ Répartition géographique des personnes sondées
 Afin d'explorer les réponses fournies par l'échantillon de populaton questionné, on propose un système de heatmap interactive permettant de selectionner un pays cible, l'une des cinq thématiques sus-citées ainsi que l'une des question de cette thématiques que l'on souhaite explorer.
 S'affiche ensuite un heatmap des réponses à la question selectionnée en fonction du sous-groupe de personnes. Une reproduction est disponnible en Figure 3.
 
-![Exploration de question](heatpam.png)  
+![Exploration de question](heatmap.png)  
 _Fig. 3 :_ Réponses à la question sur la vie politique en France.
 
 ## 3 - Analyse
