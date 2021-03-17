@@ -8,7 +8,7 @@ from os.path import join
 countries = {c.name: c.alpha_2 for c in pycountry.countries}
 c_names = {c.alpha_2: c.name for c in pycountry.countries}
 
-groups = ["Lesbian women", "Gay men", "Bisexual women", "Bisexual men", "Transgender"]
+groups = ["Gay men", "Lesbian women", "Bisexual women", "Bisexual men", "Transgender"]
 
 
 def open_data(path: str = "data") -> Dict[str, pd.DataFrame]:
